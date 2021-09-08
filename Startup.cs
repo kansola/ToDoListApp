@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -67,6 +68,15 @@ namespace ToDoListApp
                 });
 
             });
+
+            services.AddHttpsRedirection(options => { options.HttpsPort = 443; });
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor |
+                                           ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +91,12 @@ namespace ToDoListApp
 
             app.UseRouting();
             app.UseAuthentication();
-
+            app.UseHsts();
+            app.UseForwardedHeaders();
+            if (!string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("DYNO")))
+            {
+                app.UseHttpsRedirection();
+            }
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -94,6 +109,8 @@ namespace ToDoListApp
             {
                 endpoints.MapControllers();
             });
+
+
         }
     }
 }
