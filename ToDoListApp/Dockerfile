@@ -1,25 +1,22 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
-FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+# NuGet restore
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["ToDoListApp/ToDoListApp.csproj", "ToDoListApp/"]
-RUN dotnet restore "ToDoListApp/ToDoListApp.csproj"
+COPY *.sln .
+COPY *.csproj .
+RUN dotnet restore
 COPY . .
-WORKDIR "/src/ToDoListApp"
-RUN dotnet build "ToDoListApp.csproj" -c Release -o /app/build
 
+
+
+
+# publish
 FROM build AS publish
-RUN dotnet publish "ToDoListApp.csproj" -c Release -o /app/publish
+WORKDIR /src
+RUN dotnet publish -c Release -o /src/publish
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ToDoListApp.dll"]
+COPY --from=publish /src/publish .
+# ENTRYPOINT ["dotnet", "Colors.API.dll"]
+# heroku uses the following
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet ToDoListApp.dll
