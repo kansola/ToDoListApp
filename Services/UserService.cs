@@ -70,22 +70,27 @@ namespace ToDoListApp.Services
                         }
                         catch (Exception e)
                         {
-                            string a = e.Message + e.StackTrace;
+                            throw;
+                            //string a = e.Message + e.StackTrace;
 
-                            throw new Exception("Error Encountered During Registration, Please Try Again");
+                            //throw new Exception("Error Encountered During Registration, Please Try Again");
                         }
                     }
                     catch (Exception e)
                     {
-                        string a = e.Message + e.StackTrace;
-                        throw new Exception("Error Encountered During Registration, Please Try Again");
+                        throw;
+
+                        //string a = e.Message + e.StackTrace;
+                        //throw new Exception("Error Encountered During Registration, Please Try Again");
                     }
 
                 }
             }
             catch (Exception )
             {
-                throw new Exception("Error Encountered During Registration, Please Try Again");
+                throw;
+
+                //throw new Exception("Error Encountered During Registration, Please Try Again");
             }
             return isRegister;
         }

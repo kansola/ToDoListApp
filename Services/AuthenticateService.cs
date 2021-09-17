@@ -60,20 +60,22 @@ namespace ToDoListApp.Services
                         }
                         catch (Exception)
                         {
-
-                            throw new Exception("Error Encountered During Registration, Please Try Again");
+                            throw;
+                            //throw new Exception("Error Encountered During Registration, Please Try Again");
                         }
                     }
                     catch (Exception)
                     {
-                        throw new Exception("Error Encountered During Authentication, Please Try Again");
+                        throw;
+                        //throw new Exception("Error Encountered During Authentication, Please Try Again");
                     }
 
                 }
             }
             catch (Exception)
             {
-                throw new Exception("Error Encountered During Authentication, Please Try Again");
+                throw;
+                //throw new Exception("Error Encountered During Authentication, Please Try Again");
             }
             return isRegister;
         }
