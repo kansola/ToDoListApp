@@ -20,7 +20,7 @@ namespace ToDoListApp.Controllers
             _userService = userService;
         }
 
-        [HttpPost("user/register")]
+        [HttpPost("register")]
         public IActionResult RegisterUser(CreateUserModel user)
         {
             string responseMessage = "";
