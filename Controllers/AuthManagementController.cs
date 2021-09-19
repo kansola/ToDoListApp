@@ -29,7 +29,7 @@ namespace ToDoListApp.Controllers
         }
 
 
-        [HttpPost("AuthenticateUser")]
+        [HttpPost("user/login")]
         public IActionResult AuthenticateUser(Login login)
         {
             string responseMessage = "";
@@ -41,6 +41,10 @@ namespace ToDoListApp.Controllers
                     if (response)
                     {
                         var jwtToken = GenerateJwtToken(login);
+
+                        _authenticateService.RegisterToken(login.Email, jwtToken);
+
+
                         return Ok(
                                      new
                                      {
@@ -91,6 +95,24 @@ namespace ToDoListApp.Controllers
                         
                         );
                 }
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message + ": " + e.StackTrace);
+            }
+
+        }
+
+
+        [HttpPost("user/logout")]
+        public IActionResult LogOut( [FromBody]string token)
+        {
+            string responseMessage = "";
+            try
+            {
+                var response = _authenticateService.LogOut(token, out responseMessage);
+                return Ok(responseMessage);
 
             }
             catch (Exception e)

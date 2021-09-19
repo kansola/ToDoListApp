@@ -20,7 +20,7 @@ namespace ToDoListApp.Controllers
             _userService = userService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("user/register")]
         public IActionResult RegisterUser(CreateUserModel user)
         {
             string responseMessage = "";
@@ -37,21 +37,6 @@ namespace ToDoListApp.Controllers
             
         }
 
-        [HttpPost("Register2")]
-        public IActionResult RegisterUser2(CreateUserModel user)
-        {
-            string responseMessage = "";
-            try
-            {
-                var response = _userService.RegisterUser(user, out responseMessage);
-                return Ok(responseMessage);
-
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message + ": " + e.StackTrace);
-            }
-
-        }
+        
     }
 }

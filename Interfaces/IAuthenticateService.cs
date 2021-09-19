@@ -9,5 +9,9 @@ namespace ToDoListApp.Interfaces
     public interface IAuthenticateService
     {
         public bool AuthenticateUser(Login login, out string responseMessage);
+
+        public void RegisterToken(string userEmail, string token);
+
+        public bool LogOut(string token, out string responseMessage);
     }
 }
