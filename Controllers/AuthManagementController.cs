@@ -10,6 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using ToDoListApp.Configuration;
+using ToDoListApp.Filters;
 using ToDoListApp.Interfaces;
 using ToDoListApp.Models;
 
@@ -104,10 +105,12 @@ namespace ToDoListApp.Controllers
 
         }
 
-
+        [TokenAuthenticationFilter]
         [HttpPost("user/logout")]
-        public IActionResult LogOut( [FromBody]string token)
+        public IActionResult LogOut( )
         {
+            string token = string.Empty;
+            token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
             string responseMessage = "";
             try
             {

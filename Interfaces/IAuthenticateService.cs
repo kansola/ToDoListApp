@@ -13,5 +13,7 @@ namespace ToDoListApp.Interfaces
         public void RegisterToken(string userEmail, string token);
 
         public bool LogOut(string token, out string responseMessage);
+
+        public bool VerifyToken(string token);
     }
 }

@@ -8,11 +8,10 @@ namespace ToDoListApp.Interfaces
 {
     public interface ITaskService
     {
-        public bool AddTask(CreateTaskModel task, out string responseMessage);
+        public bool AddTask(CreateTaskModel task, string token, out string responseMessage);
+        public List<Tasks> GetAllTasks(string token, out string responseMessage);
 
-        public List<Tasks> GetAllTasks(out string responseMessage);
-
-        public List<Tasks> GetAllCompletedTasks(out string responseMessage);
+        public List<Tasks> GetAllCompletedTasks(string token, out string responseMessage);
 
     }
 }

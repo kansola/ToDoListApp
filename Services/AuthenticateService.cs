@@ -175,5 +175,57 @@ namespace ToDoListApp.Services
             }
             return isLoggedOut;
         }
+
+
+        public bool VerifyToken(string token)
+        {
+            bool isVerified = false;
+            try
+            {
+                int response = 0;
+
+
+                try
+                {
+                    SqlConnection sqlCon = new SqlConnection(connectionString);
+                    SqlCommand sqlCommand = new SqlCommand("VerifyToken", sqlCon);
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@token", token.Trim());
+
+                    sqlCommand.Parameters.Add("@response", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    try
+                    {
+                        sqlCon.Open();
+                        sqlCommand.ExecuteNonQuery();
+                        response = Convert.ToInt32(sqlCommand.Parameters["@response"].Value);
+
+                        if (response > 0)
+                        {
+                            isVerified = true;
+                        }
+
+                       
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                        //throw new Exception("Error Encountered During Registration, Please Try Again");
+                    }
+                }
+                catch (Exception)
+                {
+                    throw;
+                    //throw new Exception("Error Encountered During Authentication, Please Try Again");
+                }
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+                //throw new Exception("Error Encountered During Authentication, Please Try Again");
+            }
+            return isVerified;
+        }
     }
 }

@@ -19,6 +19,7 @@ using ToDoListApp.Configuration;
 using ToDoListApp.Interfaces;
 using ToDoListApp.Services;
 
+
 namespace ToDoListApp
 {
     public class Startup
@@ -34,9 +35,12 @@ namespace ToDoListApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JwtConfig>(Configuration.GetSection("JwtConfig"));
+            
             services.AddControllers();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IAuthenticateService, AuthenticateService>();
+            services.AddSingleton<ITaskService, TaskService>();
+
 
             services.AddAuthentication(options =>
             {
@@ -66,6 +70,15 @@ namespace ToDoListApp
                     Title = "ToDo App",
                     Version = "v1"
                 });
+
+                //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Description ="JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                //    Name = "Authorization",
+                //    In = ParameterLocation.Header,
+                //    Type = SecuritySchemeType.ApiKey,
+                //    Scheme = "Bearer"
+                //});
 
             });
 

@@ -22,9 +22,9 @@ namespace ToDoListApp.Services
             connectionString = _config.GetValue<string>("ConnectionStrings:ToDolistDb");
 
         }
-        public bool AddTask(CreateTaskModel task, out string responseMessage)
+        public bool AddTask(CreateTaskModel task, string token , out string responseMessage)
         {
-            string token = "";
+            
             bool isRegister = false;
             try
             {
@@ -81,9 +81,8 @@ namespace ToDoListApp.Services
         }
 
 
-        public List<Tasks> GetAllTasks(out string responseMessage)
+        public List<Tasks> GetAllTasks(string token,out string responseMessage)
         {
-            string token = "";
             int response = 0;
             List<Tasks> allTasks = new List<Tasks>();
             responseMessage = "";
@@ -113,11 +112,11 @@ namespace ToDoListApp.Services
                         {
                             Tasks task = new Tasks();
 
-                            task.DateTimeCompleted = row["DateTimeCompleted"] == DBNull.Value ? "" : DateTime.Parse(row["DateTimeCompleted"].ToString()).ToString("dddd, dd MMMM yyyy");
-                            task.DateTimeDueForCompletion = row["DateTimeDueForCompletion"] == DBNull.Value ? "" : DateTime.Parse(row["DateTimeDueForCompletion"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            task.DateTimeCompleted = row["TimeCompleted"] == DBNull.Value ? "" : DateTime.Parse(row["TimeCompleted"].ToString()).ToString("dddd, dd MMMM yyyy hh:mm:ss tt");
+                            task.DateTimeDueForCompletion = row["TimeDueForCompletion"] == DBNull.Value ? "" : DateTime.Parse(row["TimeDueForCompletion"].ToString()).ToString("dddd, dd MMMM yyyy hh:mm:ss tt");
                             task.Id = row["Id"] == DBNull.Value ? 0 : Int16.Parse(row["Id"].ToString());
 
-                            task.IsComplete = row["IsComplete"] == DBNull.Value ? false : Boolean.Parse(row["IsComplete"].ToString());
+                            task.IsComplete = row["IsCompleted"] == DBNull.Value ? false : Boolean.Parse(row["IsCompleted"].ToString());
                             task.TaskName = row["TaskName"] == DBNull.Value ? "" : row["TaskName"].ToString();
 
                             allTasks.Add(task);
@@ -143,9 +142,9 @@ namespace ToDoListApp.Services
         }
 
 
-        public List<Tasks> GetAllCompletedTasks(out string responseMessage)
+        public List<Tasks> GetAllCompletedTasks(string token, out string responseMessage)
         {
-            string token = "";
+            
             int response = 0;
             List<Tasks> allTasks = new List<Tasks>();
             responseMessage = "";
