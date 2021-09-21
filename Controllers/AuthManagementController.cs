@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -29,7 +30,7 @@ namespace ToDoListApp.Controllers
             _authenticateService = authenticateService;
         }
 
-
+        
         [HttpPost("user/login")]
         public IActionResult AuthenticateUser(Login login)
         {
@@ -105,12 +106,15 @@ namespace ToDoListApp.Controllers
 
         }
 
-        [TokenAuthenticationFilter]
+        //[TokenAuthenticationFilter]
+        [Authorize]
         [HttpPost("user/logout")]
         public IActionResult LogOut( )
         {
             string token = string.Empty;
             token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+
+            token = token.Remove(0, 7);
             string responseMessage = "";
             try
             {

@@ -13,5 +13,10 @@ namespace ToDoListApp.Interfaces
 
         public List<Tasks> GetAllCompletedTasks(string token, out string responseMessage);
 
+        public bool CompleteTask(CompleteTaskModel task, string token, out string responseMessage);
+
+        public bool UpdateTask(UpdateTaskModel task, string token, out string responseMessage);
+
+
     }
 }

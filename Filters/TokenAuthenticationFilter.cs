@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Data.SqlClient;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,8 +12,41 @@ using ToDoListApp.Interfaces;
 
 namespace ToDoListApp.Filters
 {
-    public class TokenAuthenticationFilter : Attribute, IAuthorizationFilter
+    public class TokenAuthenticationFilter : Attribute, IAuthorizationFilter,IOperationFilter
     {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            //throw new NotImplementedException();
+           
+        }
+
+        //public void OnAuthorization(AuthorizationFilterContext context)
+        //{
+        //    var authenticateToken = (IAuthenticateService)context.HttpContext.RequestServices.GetService(typeof(IAuthenticateService));
+        //    var result = true;
+        //    if (!context.HttpContext.Request.Headers.ContainsKey("Authorization"))
+        //        result = false;
+        //    string token = string.Empty;
+        //    if (result)
+        //    {
+        //        token = context.HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+
+        //        if (!authenticateToken.VerifyToken(token))
+        //        {
+        //            result = false;
+        //        }
+        //    }
+        //    if(!result)
+        //    {
+        //        context.ModelState.AddModelError("Unauthorized","You are not authorized");
+        //        context.Result = new UnauthorizedObjectResult(context.ModelState);
+        //    }
+
+
+
+        //}
+
+
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var authenticateToken = (IAuthenticateService)context.HttpContext.RequestServices.GetService(typeof(IAuthenticateService));
@@ -28,9 +63,9 @@ namespace ToDoListApp.Filters
                     result = false;
                 }
             }
-            if(!result)
+            if (!result)
             {
-                context.ModelState.AddModelError("Unauthorized","You are not authorized");
+                context.ModelState.AddModelError("Unauthorized", "You are not authorized");
                 context.Result = new UnauthorizedObjectResult(context.ModelState);
             }
 
@@ -38,6 +73,7 @@ namespace ToDoListApp.Filters
 
         }
 
-        
+
+
     }
 }

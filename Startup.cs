@@ -10,12 +10,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ToDoListApp.Configuration;
+using ToDoListApp.Filters;
 using ToDoListApp.Interfaces;
 using ToDoListApp.Services;
 
@@ -64,11 +66,39 @@ namespace ToDoListApp
             });
             services.AddSwaggerGen(c =>
             {
+                //c.OperationFilter<MyHeaderFilter>();
+
 
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "ToDo App",
                     Version = "v1"
+                });
+
+                // To Enable authorization using Swagger (JWT)    
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] {}
+
+                    }
                 });
 
                 //c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme

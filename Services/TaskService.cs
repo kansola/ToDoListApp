@@ -80,6 +80,125 @@ namespace ToDoListApp.Services
             return isRegister;
         }
 
+        public bool CompleteTask(CompleteTaskModel task, string token, out string responseMessage)
+        {
+
+            bool isComplete = false;
+            try
+            {
+                int response = 0;
+                responseMessage = "";
+
+                if (task != null)
+                {
+                    try
+                    {
+                        SqlConnection sqlCon = new SqlConnection(connectionString);
+                        SqlCommand sqlCommand = new SqlCommand("CompleteTask", sqlCon);
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@token", token);
+                        sqlCommand.Parameters.AddWithValue("@TaskId", task.TaskId);
+                        sqlCommand.Parameters.AddWithValue("@TaskCompletedTime", task.DateTimeCompleted);
+
+                        sqlCommand.Parameters.Add("@response", SqlDbType.Int).Direction = ParameterDirection.Output;
+                        try
+                        {
+                            sqlCon.Open();
+                            sqlCommand.ExecuteNonQuery();
+                            response = Convert.ToInt32(sqlCommand.Parameters["@response"].Value);
+
+                            if (response > 0)
+                            {
+                                responseMessage = "Task Completed Successfully";
+                                isComplete = true;
+                            }
+
+                            else
+                            {
+                                responseMessage = "Failed to complete task";
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw new Exception("Error Encountered while adding task, Please Try Again");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("Error Encountered while adding task, Please Try Again");
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error Encountered while adding task, Please Try Again");
+            }
+            return isComplete;
+        }
+
+        public bool UpdateTask(UpdateTaskModel task, string token, out string responseMessage)
+        {
+
+            bool isComplete = false;
+            try
+            {
+                int response = 0;
+                responseMessage = "";
+
+                if (task != null)
+                {
+                    try
+                    {
+                        SqlConnection sqlCon = new SqlConnection(connectionString);
+                        SqlCommand sqlCommand = new SqlCommand("UpdateTask", sqlCon);
+                        sqlCommand.CommandType = CommandType.StoredProcedure;
+                        sqlCommand.Parameters.AddWithValue("@token", token);
+                        sqlCommand.Parameters.AddWithValue("@TaskName", task.TaskName);
+                        sqlCommand.Parameters.AddWithValue("@TaskId", task.TaskId);
+
+                        sqlCommand.Parameters.AddWithValue("@TimeDueForCompletion", task.TimeDueForCompletion);
+
+                        sqlCommand.Parameters.Add("@response", SqlDbType.Int).Direction = ParameterDirection.Output;
+                        try
+                        {
+                            sqlCon.Open();
+                            sqlCommand.ExecuteNonQuery();
+                            response = Convert.ToInt32(sqlCommand.Parameters["@response"].Value);
+
+                            if (response > 0)
+                            {
+                                responseMessage = "Task updated Successfully";
+                                isComplete = true;
+                            }
+
+                            else
+                            {
+                                responseMessage = "Failed to update task";
+                            }
+                        }
+                        catch (Exception)
+                        {
+
+                            throw new Exception("Error Encountered while adding task, Please Try Again");
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        throw new Exception("Error Encountered while adding task, Please Try Again");
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Error Encountered while adding task, Please Try Again");
+            }
+            return isComplete;
+        }
+
+
 
         public List<Tasks> GetAllTasks(string token,out string responseMessage)
         {
@@ -151,7 +270,7 @@ namespace ToDoListApp.Services
             try
             {
                 SqlConnection sqlCon = new SqlConnection(connectionString);
-                SqlCommand sqlCommand = new SqlCommand("GetAllTasks", sqlCon);
+                SqlCommand sqlCommand = new SqlCommand("GetAllCompletedTasks", sqlCon);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
                 sqlCommand.Parameters.AddWithValue("@token", token);
                 sqlCommand.Parameters.Add("@response", SqlDbType.Int).Direction = ParameterDirection.Output;
@@ -174,11 +293,11 @@ namespace ToDoListApp.Services
                         {
                             Tasks task = new Tasks();
 
-                            task.DateTimeCompleted = row["DateTimeCompleted"] == DBNull.Value ? "" : DateTime.Parse(row["DateTimeCompleted"].ToString()).ToString("dddd, dd MMMM yyyy");
-                            task.DateTimeDueForCompletion = row["DateTimeDueForCompletion"] == DBNull.Value ? "" : DateTime.Parse(row["DateTimeDueForCompletion"].ToString()).ToString("dddd, dd MMMM yyyy");
+                            task.DateTimeCompleted = row["TimeCompleted"] == DBNull.Value ? "" : DateTime.Parse(row["TimeCompleted"].ToString()).ToString("dddd, dd MMMM yyyy hh:mm:ss tt");
+                            task.DateTimeDueForCompletion = row["TimeDueForCompletion"] == DBNull.Value ? "" : DateTime.Parse(row["TimeDueForCompletion"].ToString()).ToString("dddd, dd MMMM yyyy hh:mm:ss tt");
                             task.Id = row["Id"] == DBNull.Value ? 0 : Int16.Parse(row["Id"].ToString());
 
-                            task.IsComplete = row["IsComplete"] == DBNull.Value ? false : Boolean.Parse(row["IsComplete"].ToString());
+                            task.IsComplete = row["IsCompleted"] == DBNull.Value ? false : Boolean.Parse(row["IsCompleted"].ToString());
                             task.TaskName = row["TaskName"] == DBNull.Value ? "" : row["TaskName"].ToString();
 
                             allTasks.Add(task);

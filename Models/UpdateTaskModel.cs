@@ -6,13 +6,16 @@ using System.Threading.Tasks;
 
 namespace ToDoListApp.Models
 {
-    public class CreateTaskModel
+    public class UpdateTaskModel
     {
+        [Required]
+        public int TaskId { get; set; }
         [Required]
         public string TaskName { get; set; }
         [Required]
-        public DateTime DateTimeDueForCompletion { get; set; }
+        public DateTime TimeDueForCompletion { get; set; }
         //[Required]
         //public string AuthorizationToken { get; set; }
+
     }
 }

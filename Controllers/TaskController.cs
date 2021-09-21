@@ -11,7 +11,8 @@ using ToDoListApp.Models;
 
 namespace ToDoListApp.Controllers
 {
-    [TokenAuthenticationFilter]
+    //[TokenAuthenticationFilter]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TaskController : ControllerBase
@@ -29,10 +30,51 @@ namespace ToDoListApp.Controllers
         {
             string token = string.Empty;
             token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Remove(0, 7);
             string responseMessage = "";
             try
             {
                 var response = _taskService.AddTask(task, token,out responseMessage);
+                return Ok(responseMessage);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message + ": " + e.StackTrace);
+            }
+
+        }
+
+        [HttpPost("Complete")]
+        public IActionResult CompleteTask(CompleteTaskModel task)
+        {
+            string token = string.Empty;
+            token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Remove(0, 7);
+            string responseMessage = "";
+            try
+            {
+                var response = _taskService.CompleteTask(task, token, out responseMessage);
+                return Ok(responseMessage);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message + ": " + e.StackTrace);
+            }
+
+        }
+
+        [HttpPost("Update")]
+        public IActionResult UpdateTask(UpdateTaskModel task)
+        {
+            string token = string.Empty;
+            token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Remove(0, 7);
+            string responseMessage = "";
+            try
+            {
+                var response = _taskService.UpdateTask(task, token, out responseMessage);
                 return Ok(responseMessage);
 
             }
@@ -49,10 +91,31 @@ namespace ToDoListApp.Controllers
         {
             string token = string.Empty;
             token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Remove(0, 7);
             string responseMessage = "";
             try
             {
                 var response = _taskService.GetAllTasks( token,out responseMessage);
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message + ": " + e.StackTrace);
+            }
+
+        }
+
+        [HttpGet("Completed")]
+        public IActionResult GetAllCompletedTasks()
+        {
+            string token = string.Empty;
+            token = HttpContext.Request.Headers.First(x => x.Key == "Authorization").Value;
+            token = token.Remove(0, 7);
+            string responseMessage = "";
+            try
+            {
+                var response = _taskService.GetAllCompletedTasks(token, out responseMessage);
                 return Ok(response);
 
             }
