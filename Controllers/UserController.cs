@@ -29,7 +29,31 @@ namespace ToDoListApp.Controllers
             try
             {
                 var response = _userService.RegisterUser(user, out  responseMessage);
-                return Ok(responseMessage);
+                if (response)
+                {
+                    return Ok(
+
+                                new
+                                {
+                                    isSuccesful= true,
+                                    response = responseMessage
+
+                                }
+                        );
+                }
+                else
+                {
+                    return Ok(
+
+                               new
+                               {
+                                   isSuccesful = false,
+                                   response = responseMessage
+
+                               }
+                       );
+                }
+                
                
             }
             catch (Exception e)

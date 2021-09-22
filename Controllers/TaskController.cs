@@ -25,7 +25,7 @@ namespace ToDoListApp.Controllers
         }
 
 
-        [HttpPost("Add")]
+        [HttpPost("add")]
         public IActionResult AddTask(CreateTaskModel task)
         {
             string token = string.Empty;
@@ -35,7 +35,31 @@ namespace ToDoListApp.Controllers
             try
             {
                 var response = _taskService.AddTask(task, token,out responseMessage);
-                return Ok(responseMessage);
+                if (response)
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = true,
+                                        response = responseMessage
+
+                                    }
+                        );
+                    
+                }
+                else
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = false,
+                                        response = responseMessage
+
+                                    }
+                        );
+                }
 
             }
             catch (Exception e)
@@ -45,7 +69,7 @@ namespace ToDoListApp.Controllers
 
         }
 
-        [HttpPost("Complete")]
+        [HttpPost("complete")]
         public IActionResult CompleteTask(CompleteTaskModel task)
         {
             string token = string.Empty;
@@ -55,7 +79,31 @@ namespace ToDoListApp.Controllers
             try
             {
                 var response = _taskService.CompleteTask(task, token, out responseMessage);
-                return Ok(responseMessage);
+                if (response)
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = true,
+                                        response = responseMessage
+
+                                    }
+                        );
+
+                }
+                else
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = false,
+                                        response = responseMessage
+
+                                    }
+                        );
+                }
 
             }
             catch (Exception e)
@@ -65,7 +113,7 @@ namespace ToDoListApp.Controllers
 
         }
 
-        [HttpPost("Update")]
+        [HttpPost("update")]
         public IActionResult UpdateTask(UpdateTaskModel task)
         {
             string token = string.Empty;
@@ -75,7 +123,31 @@ namespace ToDoListApp.Controllers
             try
             {
                 var response = _taskService.UpdateTask(task, token, out responseMessage);
-                return Ok(responseMessage);
+                if (response)
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = true,
+                                        response = responseMessage
+
+                                    }
+                        );
+
+                }
+                else
+                {
+                    return Ok(
+
+                                    new
+                                    {
+                                        isSuccesful = false,
+                                        response = responseMessage
+
+                                    }
+                        );
+                }
 
             }
             catch (Exception e)
@@ -86,7 +158,7 @@ namespace ToDoListApp.Controllers
         }
 
 
-        [HttpGet("All")]
+        [HttpGet("all")]
         public IActionResult GetAllTasks()
         {
             string token = string.Empty;
@@ -106,7 +178,7 @@ namespace ToDoListApp.Controllers
 
         }
 
-        [HttpGet("All/Completed")]
+        [HttpGet("all/completed")]
         public IActionResult GetAllCompletedTasks()
         {
             string token = string.Empty;
