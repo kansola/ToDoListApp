@@ -30,7 +30,7 @@ namespace ToDoListApp.Controllers
             _authenticateService = authenticateService;
         }
 
-        
+        [AllowAnonymous]
         [HttpPost("user/login")]
         public IActionResult AuthenticateUser(Login login)
         {

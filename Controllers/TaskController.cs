@@ -106,7 +106,7 @@ namespace ToDoListApp.Controllers
 
         }
 
-        [HttpGet("Completed")]
+        [HttpGet("All/Completed")]
         public IActionResult GetAllCompletedTasks()
         {
             string token = string.Empty;
