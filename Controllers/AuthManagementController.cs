@@ -30,6 +30,10 @@ namespace ToDoListApp.Controllers
             _authenticateService = authenticateService;
         }
 
+        /// <summary>
+        /// A registered user logs into the ToDo Application and when successful a token is generated, the token should be added to the authorization header above.
+        /// </summary>
+
         [AllowAnonymous]
         [HttpPost("user/login")]
         public IActionResult AuthenticateUser(Login login)
@@ -106,7 +110,11 @@ namespace ToDoListApp.Controllers
 
         }
 
-        //[TokenAuthenticationFilter]
+
+        /// <summary>
+        /// User logs out of the ToDo Application
+        /// </summary>
+
         [Authorize]
         [HttpPost("user/logout")]
         public IActionResult LogOut( )

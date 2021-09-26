@@ -24,7 +24,11 @@ namespace ToDoListApp.Controllers
             _taskService = taskService;
         }
 
-
+        /// <summary>
+        /// Add a task on the TODO Application
+        /// </summary>
+       
+       
         [HttpPost("add")]
         public IActionResult AddTask(CreateTaskModel task)
         {
@@ -34,32 +38,54 @@ namespace ToDoListApp.Controllers
             string responseMessage = "";
             try
             {
-                var response = _taskService.AddTask(task, token,out responseMessage);
-                if (response)
+                if (ModelState.IsValid)
                 {
-                    return Ok(
+                    var response = _taskService.AddTask(task, token, out responseMessage);
+                    if (response)
+                    {
+                        return Ok(
 
-                                    new
-                                    {
-                                        isSuccesful = true,
-                                        response = responseMessage
+                                        new
+                                        {
+                                            isSuccesful = true,
+                                            response = responseMessage
 
-                                    }
-                        );
-                    
+                                        }
+                            );
+
+                    }
+                    else
+                    {
+                        return Ok(
+
+                                        new
+                                        {
+                                            isSuccesful = false,
+                                            response = responseMessage
+
+                                        }
+                            );
+                    }
                 }
                 else
                 {
-                    return Ok(
+                    return BadRequest(
 
-                                    new
-                                    {
-                                        isSuccesful = false,
-                                        response = responseMessage
+                        new
+                        {
 
-                                    }
+                            Success = false,
+                            Errors = new List<string>()
+                            {
+                                "Invalid Payload"
+                            }
+
+                        }
+
+
                         );
                 }
+                
 
             }
             catch (Exception e)
@@ -68,6 +94,10 @@ namespace ToDoListApp.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Complete a task on the ToDo Application
+        /// </summary>
 
         [HttpPost("complete")]
         public IActionResult CompleteTask(CompleteTaskModel task)
@@ -78,32 +108,54 @@ namespace ToDoListApp.Controllers
             string responseMessage = "";
             try
             {
-                var response = _taskService.CompleteTask(task, token, out responseMessage);
-                if (response)
+                if(ModelState.IsValid)
                 {
-                    return Ok(
+                    var response = _taskService.CompleteTask(task, token, out responseMessage);
+                    if (response)
+                    {
+                        return Ok(
 
-                                    new
-                                    {
-                                        isSuccesful = true,
-                                        response = responseMessage
+                                        new
+                                        {
+                                            isSuccesful = true,
+                                            response = responseMessage
 
-                                    }
-                        );
+                                        }
+                            );
 
+                    }
+                    else
+                    {
+                        return Ok(
+
+                                        new
+                                        {
+                                            isSuccesful = false,
+                                            response = responseMessage
+
+                                        }
+                            );
+                    }
                 }
                 else
                 {
-                    return Ok(
+                    return BadRequest(
 
-                                    new
-                                    {
-                                        isSuccesful = false,
-                                        response = responseMessage
+                        new
+                        {
 
-                                    }
+                            Success = false,
+                            Errors = new List<string>()
+                            {
+                                "Invalid Payload"
+                            }
+
+                        }
+
+
                         );
                 }
+                
 
             }
             catch (Exception e)
@@ -112,6 +164,10 @@ namespace ToDoListApp.Controllers
             }
 
         }
+
+        /// <summary>
+        /// Update a task information on the ToDo Application
+        /// </summary>
 
         [HttpPost("update")]
         public IActionResult UpdateTask(UpdateTaskModel task)
@@ -122,32 +178,54 @@ namespace ToDoListApp.Controllers
             string responseMessage = "";
             try
             {
-                var response = _taskService.UpdateTask(task, token, out responseMessage);
-                if (response)
+                if (ModelState.IsValid)
                 {
-                    return Ok(
+                    var response = _taskService.UpdateTask(task, token, out responseMessage);
+                    if (response)
+                    {
+                        return Ok(
 
-                                    new
-                                    {
-                                        isSuccesful = true,
-                                        response = responseMessage
+                                        new
+                                        {
+                                            isSuccesful = true,
+                                            response = responseMessage
 
-                                    }
-                        );
+                                        }
+                            );
 
+                    }
+                    else
+                    {
+                        return Ok(
+
+                                        new
+                                        {
+                                            isSuccesful = false,
+                                            response = responseMessage
+
+                                        }
+                            );
+                    }
                 }
                 else
                 {
-                    return Ok(
+                    return BadRequest(
 
-                                    new
-                                    {
-                                        isSuccesful = false,
-                                        response = responseMessage
+                        new
+                        {
 
-                                    }
+                            Success = false,
+                            Errors = new List<string>()
+                            {
+                                "Invalid Payload"
+                            }
+
+                        }
+
+
                         );
                 }
+               
 
             }
             catch (Exception e)
@@ -157,6 +235,10 @@ namespace ToDoListApp.Controllers
 
         }
 
+
+        /// <summary>
+        /// Retreive all added tasks on the ToDo Application
+        /// </summary>
 
         [HttpGet("all")]
         public IActionResult GetAllTasks()
@@ -178,6 +260,9 @@ namespace ToDoListApp.Controllers
 
         }
 
+        /// <summary>
+        /// Retreive all completed tasks on the ToDo Application
+        /// </summary>
         [HttpGet("all/completed")]
         public IActionResult GetAllCompletedTasks()
         {

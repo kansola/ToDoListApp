@@ -21,38 +21,63 @@ namespace ToDoListApp.Controllers
             _userService = userService;
         }
 
-        
+        /// <summary>
+        /// Register a user on the ToDo Application
+        /// </summary>
+      
         [HttpPost("register")]
         public IActionResult RegisterUser(CreateUserModel user)
         {
             string responseMessage = "";
             try
             {
-                var response = _userService.RegisterUser(user, out  responseMessage);
-                if (response)
+                if (ModelState.IsValid)
                 {
-                    return Ok(
+                    var response = _userService.RegisterUser(user, out responseMessage);
+                    if (response)
+                    {
+                        return Ok(
 
-                                new
-                                {
-                                    isSuccesful= true,
-                                    response = responseMessage
+                                    new
+                                    {
+                                        isSuccesful = true,
+                                        response = responseMessage
 
-                                }
-                        );
+                                    }
+                            );
+                    }
+                    else
+                    {
+                        return Ok(
+
+                                   new
+                                   {
+                                       isSuccesful = false,
+                                       response = responseMessage
+
+                                   }
+                           );
+                    }
                 }
                 else
                 {
-                    return Ok(
+                    return BadRequest(
 
-                               new
-                               {
-                                   isSuccesful = false,
-                                   response = responseMessage
+                        new
+                        {
 
-                               }
-                       );
+                            Success = false,
+                            Errors = new List<string>()
+                            {
+                                "Invalid Payload"
+                            }
+
+                        }
+
+
+                        );
                 }
+               
                 
                
             }
